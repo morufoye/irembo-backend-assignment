@@ -11,7 +11,8 @@ create table user_account(
 	nationality varchar,
 	status varchar,
 	token_holder varchar,
-	CONSTRAINT pk_usr_id PRIMARY KEY (id)
+	CONSTRAINT pk_usr_id PRIMARY KEY (id),
+	CONSTRAINT unq_user_id UNIQUE (user_id)
 	);
 
 
