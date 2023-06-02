@@ -38,7 +38,7 @@ public class AccountService {
                 .build();
         return userAccountRepo.save(userAccount)
                 .map(x -> ResponseEntity.ok().body(x))
-                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
+                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).build()));
     }
 
     public Mono<ResponseEntity<Boolean>> loginStepOne(@RequestBody LoginOne login) {
