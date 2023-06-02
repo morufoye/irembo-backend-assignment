@@ -1,5 +1,5 @@
 create table user_account(
- id bigserial not null,
+    id bigserial not null,
 	user_id varchar,
 	password varchar,
 	firstname varchar,

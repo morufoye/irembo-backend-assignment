@@ -6,6 +6,7 @@ import com.assignment.backend.request.*;
 import com.assignment.backend.service.AccountService;
 import com.assignment.backend.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -18,7 +19,7 @@ public class UserAccountController {
     private AccountService accountService;
 
     @PostMapping("/signup")
-    public Mono<UserAccount> signUp(@RequestBody @Valid SignUp signUp){
+    public Mono<ResponseEntity<UserAccount>> signUp(@RequestBody @Valid SignUp signUp){
         return accountService.signUp(signUp);
     }
 
@@ -40,6 +41,11 @@ public class UserAccountController {
     @GetMapping("/get-user/{userId}")
     public Mono<UserAccount> getUser(@PathVariable String userId){
         return accountService.getUser(userId);
+    }
+
+    @GetMapping("/username-available/{userId}")
+    public Mono<Boolean> isUsernameAvailable(@PathVariable String userId){
+        return accountService.checkUserAvailability(userId);
     }
 
     @PostMapping("/verification")

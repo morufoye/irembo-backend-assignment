@@ -28,8 +28,7 @@ public class AccountService {
     @Autowired
     private EmailService emailService;
 
-    public Mono<UserAccount> signUp(SignUp signUp) {
-
+    public Mono<ResponseEntity<UserAccount>> signUp(SignUp signUp) {
         UserAccount userAccount = UserAccount.builder()
                 .userId(signUp.getUserId())
                 .password(passwordEncoder.encode(signUp.getPassword()))
@@ -37,7 +36,9 @@ public class AccountService {
                 .lastname(signUp.getLastname())
                 .status(AccountVerificationEnum.UNVERIFIED)
                 .build();
-        return userAccountRepo.save(userAccount);
+        return userAccountRepo.save(userAccount)
+                .map(x -> ResponseEntity.ok().body(x))
+                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 
     public Mono<ResponseEntity<Boolean>> loginStepOne(@RequestBody LoginOne login) {
@@ -110,6 +111,9 @@ public class AccountService {
         return   accountVerificationDetailsRepo.save(accountVerificationDetails);
     }
 
-
+    public Mono<Boolean> checkUserAvailability(String username){
+        return userAccountRepo.findByUserId(username)
+                .map(x -> (x != null));
+    }
 
 }
